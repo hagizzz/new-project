@@ -2,7 +2,7 @@ import express  from "express"
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import { addUser, deleteUserById, getUserById, getUsers, updateUserById } from "./users.js"
-import { addTournament, addUserToTournament, getTournaments, getTournamentById, deleteUserInTournament } from "./tournament.js"
+import { addTournament, addUserToTournament, getTournaments, getTournamentById, deleteUserInTournament, findFinalize } from "./tournament.js"
 
 const server = express() 
 const PORT = 3000
@@ -56,6 +56,16 @@ server.post('/tournaments/:tournamentId/users/:userId', (req, res) => {
         res.send('User added')
     }
     else res.status(404)
+})
+
+server.post('/tournaments/:tournamentId/finalize', (req, res) => {
+    const tournamentId = parseInt(req.params.tournamentId)
+    const tournament = getTournamentById(tournamentId)
+
+    if(tournament) {
+        if (!tournament.winner) res.send(findFinalize(tournamentId))
+        else res.send('Tournament is closed')
+    } else res.status(404)
 })
 
 server.delete('/users/:id', (req, res) => {

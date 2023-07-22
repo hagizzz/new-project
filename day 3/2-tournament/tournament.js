@@ -15,7 +15,8 @@ export function addTournament(tournament) {
     tournaments.push({
         id: tournaments.length + 1,
         name: tournament.name,
-        users: []
+        users: [],
+        winner: null,
     })
 }
 
@@ -36,4 +37,15 @@ export function addUserToTournament(tournamentId, user) {
     tournaments[tournamentIndex].users.push(user)
 }
 
+export function findFinalize(tournamentId) {
+    const tournamentIndex = tournaments.findIndex(tournament => {
+        return tournament.id === tournamentId
+    })
+    const randomIndex = Math.floor(Math.random()*tournaments[tournamentIndex].users.length)
+    const randomWinner = tournaments[tournamentIndex].users[randomIndex]
+
+    tournaments[tournamentIndex].winner = randomWinner
+
+    return randomWinner
+} 
 
